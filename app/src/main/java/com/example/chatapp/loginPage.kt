@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatButton
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -25,6 +26,10 @@ class loginPage : AppCompatActivity() {
         setContentView(R.layout.activity_login_page)
         FirebaseApp.initializeApp(this)
 
+
+
+        val loginWithGoogle = findViewById<AppCompatButton>(R.id.loginWithGoogle)
+        val register = findViewById<AppCompatButton>(R.id.register)
 
 
         firebaseAuth = FirebaseAuth.getInstance()
