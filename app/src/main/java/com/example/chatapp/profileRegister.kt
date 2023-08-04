@@ -13,6 +13,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatButton
 import java.io.ByteArrayOutputStream
 class profileRegister : AppCompatActivity() {
 
@@ -23,7 +24,7 @@ class profileRegister : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile_register)
         val editTextViewProfieRegister = findViewById<EditText>(R.id.editTextViewProfieRegister)
-        val saveButtonProfileRegister = findViewById<Button>(R.id.saveButtonProfileRegister)
+        val saveButtonProfileRegister = findViewById<AppCompatButton>(R.id.saveButtonProfileRegister)
 
         // code for image to get picked from the user
         imageViewProfileRegister = findViewById<ImageView>(R.id.imageViewProfileRegister)
