@@ -14,18 +14,24 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
+import com.google.firebase.auth.FirebaseAuth
 import java.io.ByteArrayOutputStream
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import java.util.UUID
 class profileRegister : AppCompatActivity() {
-
+    private lateinit var fireBaseAuth : FirebaseAuth
     private val SELECT_IMAGE_REQUEST = 1
     private lateinit var imageViewProfileRegister :ImageView
     private lateinit var profileImageBitmap: Bitmap
+    private lateinit var userEmail : String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile_register)
         val editTextViewProfieRegister = findViewById<EditText>(R.id.editTextViewProfieRegister)
         val saveButtonProfileRegister = findViewById<AppCompatButton>(R.id.saveButtonProfileRegister)
-
+        userEmail = intent.getStringExtra("user_email").toString()
         // code for image to get picked from the user
         imageViewProfileRegister = findViewById<ImageView>(R.id.imageViewProfileRegister)
         imageViewProfileRegister.setOnClickListener {
@@ -38,8 +44,7 @@ class profileRegister : AppCompatActivity() {
             } else if (!::profileImageBitmap.isInitialized) {
                 Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show()
             } else {
-                // Save the image and user name in SharedPreferences
-                saveDataToSharedPreferences(userName, profileImageBitmap)
+                uploadProfileImage(userName,profileImageBitmap)
                 val intent = Intent(this,Homescreen::class.java)
                 startActivity(intent)
 
@@ -47,6 +52,53 @@ class profileRegister : AppCompatActivity() {
             }
         }
 
+    }
+
+    private fun uploadProfileImage(userName: String, profileImageBitmap: Bitmap){
+
+        val storageRef: StorageReference = FirebaseStorage.getInstance().reference
+        val imageRef: StorageReference = storageRef.child("profile_images/${UUID.randomUUID()}.png")
+
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        profileImageBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+        val byteArray = byteArrayOutputStream.toByteArray()
+
+        imageRef.putBytes(byteArray)
+            .addOnSuccessListener { taskSnapshot ->
+                // Image uploaded successfully, get the download URL.
+                imageRef.downloadUrl.addOnSuccessListener { uri ->
+                    // Now you have the download URL for the uploaded image (uri.toString()).
+                    // Save the user data including the image URL in Firestore.
+                    saveUserData(userName, userEmail, uri.toString())
+                }
+            }
+            .addOnFailureListener { exception ->
+                // Handle image upload failure.
+            }
+
+    }
+
+    private fun saveUserData(userName: String, userEmail: String, photoUrl: String) {
+        val user = User(userName, userEmail, photoUrl)
+
+        val db = FirebaseFirestore.getInstance()
+        val usersCollectionRef = db.collection("users")
+
+        // Use the Firebase Auth UID as the document ID for the user.
+        val userId = fireBaseAuth.currentUser?.uid
+
+        if (userId != null) {
+            usersCollectionRef.document(userId).set(user)
+                .addOnSuccessListener {
+                    // User data saved successfully.
+                    val intent = Intent(this, Homescreen::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+                .addOnFailureListener { exception ->
+                    // Handle user data saving failure.
+                }
+        }
     }
 
     private fun saveDataToSharedPreferences(userName: String, profileImageBitmap: Bitmap) {
@@ -73,7 +125,7 @@ class profileRegister : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (resultCode == Activity.RESULT_OK && requestCode == SELECT_IMAGE_REQUEST) {
+        if (resultCode == RESULT_OK && requestCode == SELECT_IMAGE_REQUEST) {
             val imageUri = data?.data
             if (imageUri != null) {
                 val bitmap = decodeImageUri(imageUri)

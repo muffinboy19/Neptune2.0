@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ChatApp</string>
+    <string name="default_web_client_id">AIzaSyCYvOQ2MsqtMRAL6XdMp1RI6PARosRfVa8</string>
 </resources>

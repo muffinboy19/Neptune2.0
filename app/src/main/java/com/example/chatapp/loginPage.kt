@@ -6,8 +6,10 @@ import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.Auth
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 
@@ -15,11 +17,14 @@ class loginPage : AppCompatActivity() {
     companion object {
         const val RC_SIGN_IN = 9001
     }
+
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var firebaseAuth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login_page)
+        FirebaseApp.initializeApp(this)
+
 
 
         firebaseAuth = FirebaseAuth.getInstance()
@@ -48,6 +53,13 @@ class loginPage : AppCompatActivity() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     val user = firebaseAuth.currentUser
+                    val userEmail = user?.email
+                    if(userEmail!=null){
+                        val intent = Intent(this,Homescreen::class.java)
+                        intent.putExtra("user_email",userEmail)
+                        startActivity(intent)
+                        finish()
+                    }
                     // Handle successful sign-in here, e.g., navigate to the main activity.
                 } else {
                     // If sign-in fails, display a message to the user.
@@ -59,14 +71,16 @@ class loginPage : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == RC_SIGN_IN) {
-            val task = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
-            if (task.isSuccess) {
-                val account = task.signInAccount
-                account?.let {
-                    firebaseAuthWithGoogle(it.idToken!!)
+            val task = data?.let { Auth.GoogleSignInApi.getSignInResultFromIntent(it) }
+            if (task != null) {
+                if (task.isSuccess) {
+                    val account = task.signInAccount
+                    account?.let {
+                        firebaseAuthWithGoogle(it.idToken!!)
+                    }
+                } else {
+                    // If Google Sign-In fails, handle it here.
                 }
-            } else {
-                // If Google Sign-In fails, handle it here.
             }
         }
     }
