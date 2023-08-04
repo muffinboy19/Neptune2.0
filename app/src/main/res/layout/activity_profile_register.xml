@@ -6,4 +6,30 @@
     android:layout_height="match_parent"
     tools:context=".profileRegister">
 
+    <ImageView
+        android:id="@+id/imageViewProfileRegister"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <Button
+        android:id="@+id/saveButtonProfileRegister"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_marginStart="39dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewProfileRegister" />
+
+    <EditText
+        android:id="@+id/editTextViewProfieRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="136dp"
+        android:layout_marginTop="131dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewProfileRegister" />
 </androidx.constraintlayout.widget.ConstraintLayout>

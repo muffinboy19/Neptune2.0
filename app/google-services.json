@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "335230316840",
+    "project_id": "neptune-10b89",
+    "storage_bucket": "neptune-10b89.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:335230316840:android:3b00d02cc68fb6273f201d",
+        "android_client_info": {
+          "package_name": "com.example.chatapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "335230316840-2qgarp0dr4o91hhtfm5ul9if6tve4dc4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYvOQ2MsqtMRAL6XdMp1RI6PARosRfVa8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "335230316840-2qgarp0dr4o91hhtfm5ul9if6tve4dc4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
