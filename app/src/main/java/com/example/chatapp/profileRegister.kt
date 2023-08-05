@@ -13,11 +13,11 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
-import com.google.firebase.auth.FirebaseAuth
+//import com.google.firebase.auth.FirebaseAuth
 import java.io.ByteArrayOutputStream
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
+//import com.google.firebase.firestore.FirebaseFirestore
+//import com.google.firebase.storage.FirebaseStorage
+//import com.google.firebase.storage.StorageReference
 import java.util.UUID
 class profileRegister : AppCompatActivity() {
 //    private lateinit var fireBaseAuth : FirebaseAuth
