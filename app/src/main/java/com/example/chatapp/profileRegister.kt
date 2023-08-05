@@ -21,7 +21,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import java.util.UUID
 class profileRegister : AppCompatActivity() {
-    private lateinit var fireBaseAuth : FirebaseAuth
+//    private lateinit var fireBaseAuth : FirebaseAuth
     private val SELECT_IMAGE_REQUEST = 1
     private lateinit var imageViewProfileRegister :ImageView
     private lateinit var profileImageBitmap: Bitmap
