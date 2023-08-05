@@ -7,11 +7,12 @@
         android:required="true" />
 
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
-
 
     <application
         android:allowBackup="true"
@@ -24,7 +25,7 @@
         android:theme="@style/Theme.ChatApp"
         tools:targetApi="31">
         <activity
-            android:name=".homePage"
+            android:name=".Homescreen"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
@@ -33,10 +34,10 @@
             android:name=".loginPage"
             android:exported="false" />
         <activity
-            android:name=".WelcomPage"
+            android:name=".profileRegister"
             android:exported="false" />
         <activity
-            android:name=".profileRegister"
+            android:name=".WelcomPage"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

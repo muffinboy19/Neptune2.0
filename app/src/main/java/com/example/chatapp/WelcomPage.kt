@@ -1,9 +1,10 @@
 
 package com.example.chatapp
 /*
-this page would contain regitser and lgoin links
+page 1
  */
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.widget.AppCompatButton
@@ -14,6 +15,11 @@ class WelcomPage : AppCompatActivity() {
         setContentView(R.layout.activity_welcom_page)
 
         val agreeAndContinueButton = findViewById<AppCompatButton>(R.id.agreeAndContinueButton)
+        agreeAndContinueButton.setOnClickListener{
+            val intent = Intent(this,loginPage::class.java)
+            startActivity(intent)
+            finish()
+        }
 
     }
 }
