@@ -74,7 +74,7 @@ class profileRegister : AppCompatActivity() {
 
     private fun sendUserData(userName: String, imageUri: Uri?) {
         UserData.getInstance().username = userName
-        UserData.getInstance().imageUri = imageUri.toString()
+        UserData.getInstance().imageUri = imageUri
     }
 
 }

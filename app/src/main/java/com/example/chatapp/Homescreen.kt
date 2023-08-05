@@ -84,11 +84,7 @@ class Homescreen : AppCompatActivity() {
         }
 
 
-        if (username != null) {
-            if (userEmail != null) {
-                saveUserDetailsToFirestore(username, imageUri, userEmail)
-            }
-        }
+
 
 
 
