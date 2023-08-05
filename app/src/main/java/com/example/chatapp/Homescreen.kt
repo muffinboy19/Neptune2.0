@@ -3,6 +3,7 @@ package com.example.chatapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
@@ -19,17 +20,19 @@ class Homescreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_page)
         FirebaseApp.initializeApp(this)
-        val userEmail = intent.getStringExtra("userEmail")
-        val userName = intent.getStringExtra("userName")
-        val profileImageUrl = intent.getStringExtra("profileImageUrl")
+        val username = UserData.getInstance().username
+        val userEmail = UserData.getInstance().userEmail
+        val imageUri = UserData.getInstance().imageUri
 
 
-//        val userEmail = intent.getStringExtra("userEmail")
-//        if (userEmail != null) {
-//            // Do something with the user's email, e.g., display it on the screen
-//            // For example, assuming you have a TextView with ID "emailTextView":
-//            emailTextView.text = "Welcome, $userEmail"
-//        }
+        val tt1 = findViewById<TextView>(R.id.tt1)
+        tt1.text = userEmail
+
+        val tt2 = findViewById<TextView>(R.id.tt2)
+        tt2.text  = username
+
+        val tt3 = findViewById<TextView>(R.id.tt3)
+        tt3.text = imageUri
 
 
 

@@ -17,6 +17,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.auth.User
 
 /*
 page 2
@@ -69,11 +70,7 @@ class loginPage : AppCompatActivity() {
                     Toast.makeText(this, "Welcome", Toast.LENGTH_SHORT).show()
 
                     // Intent for Homescreen activity
-                    val homeScreenIntent = Intent(this, Homescreen::class.java).apply {
-                        putExtra("userEmail", userEmail)
-                    }
-                    startActivity(homeScreenIntent)
-
+                    UserData.getInstance().userEmail = userEmail
                     // Intent for ProfileRegister activity
                     val profileRegisterIntent = Intent(this, profileRegister::class.java)
                     startActivity(profileRegisterIntent)

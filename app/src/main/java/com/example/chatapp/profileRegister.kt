@@ -25,6 +25,7 @@ class profileRegister : AppCompatActivity() {
     private lateinit var imageViewProfileRegister :ImageView
     private lateinit var profileImageBitmap: Bitmap
     private lateinit var profileImageUri: Uri
+    private lateinit var userNameprofileRegister: String
     private lateinit var userEmail : String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,17 +38,17 @@ class profileRegister : AppCompatActivity() {
             openImagePicker()
         }
         val imageViewProfileRegister: ImageView = findViewById(R.id.imageViewProfileRegister)
-        saveButtonProfileRegister.setOnClickListener{
-
-                val userName = displayNameProfileRegister.text.toString().trim()
-                if (userName.isEmpty()) {
-                    Toast.makeText(this, "Please enter your name", Toast.LENGTH_SHORT).show()
-                } else if (profileImageUri == null) {
-                    Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show()
-                } else {
-                    val intent = Intent(this,Homescreen::class.java)
-                    startActivity(intent)
-                }
+        saveButtonProfileRegister.setOnClickListener {
+            val userName = displayNameProfileRegister.text.toString().trim()
+            if (userName.isEmpty()) {
+                Toast.makeText(this, "Please enter your name", Toast.LENGTH_SHORT).show()
+            } else if (imageViewProfileRegister.drawable == null) {
+                Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show()
+            } else {
+                sendUserData(userName, profileImageUri) // Pass the profileImageUri to the next activity
+                val intent = Intent(this, Homescreen::class.java)
+                startActivity(intent)
+            }
         }
     }
 
@@ -63,17 +64,17 @@ class profileRegister : AppCompatActivity() {
             if (imageUri != null) {
                 val imageBitmap = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
                 imageViewProfileRegister.setImageBitmap(imageBitmap)
-                Toast.makeText(this,"Image SET ",Toast.LENGTH_SHORT).show()
-                sendImageUri(imageUri)
+                profileImageUri = imageUri // Update the class-level variable with the selected image URI
+                Toast.makeText(this, "Image SET", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this,"Image  NOT SET ",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Image NOT SET", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun sendImageUri(imageUri: Uri) {
-        val intent = Intent(this, Homescreen::class.java)
-        intent.putExtra("imageUri", imageUri.toString())
+    private fun sendUserData(userName: String, imageUri: Uri?) {
+        UserData.getInstance().username = userName
+        UserData.getInstance().imageUri = imageUri.toString()
     }
 
 }
