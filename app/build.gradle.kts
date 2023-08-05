@@ -63,8 +63,10 @@ dependencies {
     implementation ("com.google.firebase:firebase-core:21.1.1")
     implementation ("com.google.firebase:firebase-firestore:24.7.0")
     implementation ("com.google.firebase:firebase-firestore-ktx:24.7.0")
-   implementation ("com.google.firebase:firebase-storage:20.0.1")
+   implementation ("com.google.firebase:firebase-storage:20.2.1")
     implementation ("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-auth-ktx:22.1.1") // Optional, for authentication
+    implementation ("com.google.firebase:firebase-firestore-ktx:24.7.0")
     implementation ("com.google.firebase:firebase-database-ktx")
     implementation ("androidx.core:core-ktx:1.10.1" )// Use the latest version
     implementation ("androidx.appcompat:appcompat:1.6.1") // Use the latest version
