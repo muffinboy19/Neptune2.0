@@ -21,31 +21,16 @@ import java.util.UUID
 class Homescreen : AppCompatActivity() {
     private val db  = FirebaseFirestore.getInstance()
     private lateinit var auth:FirebaseAuth
-       private lateinit var rc: RecyclerView
-    private lateinit var userList: ArrayList<User>
     private lateinit var mdref :DatabaseReference
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_page)
-
-
-
-
-
-
         FirebaseApp.initializeApp(this)
         auth = FirebaseAuth.getInstance()
         mdref  = FirebaseDatabase.getInstance().reference.child("User")
-
-
-
-
-
         val username = UserData.getInstance().username
         val userEmail = UserData.getInstance().userEmail
         val userId = UserData.getInstance().userId
-
-
         UserDataLiveData.imageUrlLiveData.observe(this) { imageUrl ->
             if (imageUrl != null) {
                 // The image URL is available, you can use it here
@@ -71,6 +56,31 @@ class Homescreen : AppCompatActivity() {
                 Toast.makeText(this, "Image URL is null", Toast.LENGTH_SHORT).show()
             }
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     }
