@@ -58,6 +58,10 @@ class loginPage : AppCompatActivity() {
             val signIntent = googleSignInClient.signInIntent
             startActivityForResult(signIntent,RC_SIGN_IN)
         }
+//        imageViewGoogleSignIn.setOnClickListener {
+//            val signIntent = googleSignInClient.signInIntent
+//            startActivityForResult(signIntent,RC_SIGN_IN)
+//        }
     }
 
     private fun firebaseAuthWithGoogle(account: GoogleSignInAccount?) {
