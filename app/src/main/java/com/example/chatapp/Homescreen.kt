@@ -1,6 +1,7 @@
 package com.example.chatapp
 
 
+import android.content.ContentValues.TAG
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.RecyclerView
@@ -29,11 +30,16 @@ class Homescreen : AppCompatActivity() {
         setContentView(R.layout.activity_home_page)
         FirebaseApp.initializeApp(this)
         auth = FirebaseAuth.getInstance()
-        mdref  = FirebaseDatabase.getInstance().reference.child("User")
+
+
+
+       // mdref  = FirebaseDatabase.getInstance().reference.child("User")
+
+
         val username = UserData.getInstance().username
         val userEmail = UserData.getInstance().userEmail
         val userId = UserData.getInstance().userId
-        var myUrl :String =""
+        var myUrl: String = ""
         UserDataLiveData.imageUrlLiveData.observe(this) { imageUrl ->
             if (imageUrl != null) {
                 // The image URL is available, you can use it here
@@ -46,13 +52,14 @@ class Homescreen : AppCompatActivity() {
                 )
 
                 if (userId != null) {
+                    // Use Firestore to store the data
                     db.collection("users").document(userId)
                         .set(user)
                         .addOnSuccessListener {
-                            Log.d("Homescreen", "User data added to Firestore.")
+                            Toast.makeText(this, "Added to Firestore", Toast.LENGTH_SHORT).show()
                         }
                         .addOnFailureListener { e ->
-                            Log.e("Homescreen", "Error adding user data to Firestore: $e")
+                            Toast.makeText(this, "Upload failed bro", Toast.LENGTH_SHORT).show()
                         }
                 }
             } else {
@@ -61,10 +68,33 @@ class Homescreen : AppCompatActivity() {
             }
         }
 
-        if (username != null) {
-            if (userEmail != null) {
-                addUserToTheDataBase(username,userEmail,myUrl,auth.currentUser!!.uid)
+        userList = ArrayList()
+        ChatUserAdapterName = ChatUserAdapter(this, userList)
+        rc = findViewById(R.id.rc)
+        rc.layoutManager = LinearLayoutManager(this)
+        rc.adapter = ChatUserAdapterName
+
+
+        mdref = FirebaseDatabase.getInstance().getReference()
+
+        db.collection("users").addSnapshotListener { snapshot, e ->
+            if (e != null) {
+                Log.w(TAG, "Listen failed.", e)
+                return@addSnapshotListener
             }
+
+            userList.clear()
+            if (snapshot != null) {
+                for (document in snapshot) {
+                    val cu = document.toObject(ChatUser::class.java)
+                    if (auth.currentUser?.uid == cu.uid) {
+
+                    } else {
+                        userList.add(cu)
+                    }
+                }
+            }
+            ChatUserAdapterName.notifyDataSetChanged()
         }
 
 
@@ -74,44 +104,6 @@ class Homescreen : AppCompatActivity() {
 
 
 
-        userList = ArrayList()
-        ChatUserAdapterName = ChatUserAdapter(this, userList)
-        rc = findViewById(R.id.rc)
-        rc.layoutManager = LinearLayoutManager(this)
-        rc.adapter = ChatUserAdapterName
-        mdref = FirebaseDatabase.getInstance().getReference()
-
-
-        mdref.child("user").addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                userList.clear()
-                for (posSanpshot in snapshot.children) {
-                    val cu = posSanpshot.getValue(ChatUser::class.java)
-                    if(auth.currentUser?.uid == cu?.uid){
-
-                    }else{
-                        userList.add(cu!!)
-                    }
-
-                }
-                ChatUserAdapterName.notifyDataSetChanged()
-
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-
-
-        })
-
-
-
-
-
-
-
-
 
 
 
@@ -126,13 +118,11 @@ class Homescreen : AppCompatActivity() {
 
     }
 
-    fun addUserToTheDataBase(name: String, email: String,photoUrl:String, uid: String){
-
-        mdref = FirebaseDatabase.getInstance().getReference()
-        mdref.child("user").child(uid).setValue(User(name,email,photoUrl,uid))
-
-
+    fun addUserToTheDataBase(name: String, email: String, photoUrl: String, uid: String) {
+        mdref = FirebaseDatabase.getInstance().getReference("User") // Use "User" as the node name
+        mdref.child(uid).setValue(User(name, email, photoUrl, uid))
     }
+
 
 
 

@@ -28,7 +28,7 @@
             android:name=".Homescreen"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ChatScreen"
             android:exported="false" />
         <activity
             android:name=".profileRegister"

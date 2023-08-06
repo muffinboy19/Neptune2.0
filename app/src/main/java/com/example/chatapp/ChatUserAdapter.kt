@@ -26,10 +26,10 @@ class ChatUserAdapter(val context: Context,val ChatuserList : ArrayList<ChatUser
 
     override fun onBindViewHolder(holder: ChatUserViewHodler, position: Int) {
         val current_user  = ChatuserList[position]
-        holder.name_user.text = current_user.name
+        holder.name_user.text = UserData.getInstance().username
         holder.itemView.setOnClickListener{
             val intent = Intent(context,ChatScreen::class.java)
-            intent.putExtra("name",current_user.name)
+            intent.putExtra("name",current_user.username)
             intent.putExtra("uid",current_user.uid)
             context.startActivity(intent)
 

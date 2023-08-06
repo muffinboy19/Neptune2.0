@@ -1,4 +1,7 @@
 package com.example.chatapp
-
-class ChatUser(var name: String?, var uid: String?, var photoUrl: String?) {
-}
+data class ChatUser(
+    var uid: String = "",
+    var username: String = "",
+    var userEmail: String = "",
+    var userImageUrl: String = ""
+)
