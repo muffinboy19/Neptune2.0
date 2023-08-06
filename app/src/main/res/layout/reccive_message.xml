@@ -3,16 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#CF9292"
-    tools:context=".Homescreen">
+    android:layout_alignParentLeft="true"
+    android:padding="10dp"
+    android:layout_height="wrap_content">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rc"
-        android:layout_width="409dp"
-        android:layout_height="500dp"
-        android:background="#FFFFFF"
+    <TextView
+        android:id="@+id/textreccived"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/reccivemessage"
+        android:padding="10dp"
+        android:text="This is reccive message"
+        android:textColor="#000000"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

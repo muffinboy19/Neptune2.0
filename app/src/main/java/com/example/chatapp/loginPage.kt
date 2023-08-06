@@ -4,6 +4,7 @@ import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
@@ -27,14 +28,17 @@ class loginPage : AppCompatActivity() {
     private val RC_SIGN_IN = 9001
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var loadingView: View
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login_page)
 
+        loadingView = findViewById<View>(R.id.loadingView)
         FirebaseApp.initializeApp(this)
 //  code for the register page
         val registerLoginPage = findViewById<AppCompatButton>(R.id.registerLoginPage)
         registerLoginPage.setOnClickListener{
+
 
         }
 
@@ -53,10 +57,13 @@ class loginPage : AppCompatActivity() {
         loginWithGoogle.setOnClickListener {
             val signIntent = googleSignInClient.signInIntent
             startActivityForResult(signIntent,RC_SIGN_IN)
+            showLoadingView()
         }
+
         imageViewGoogleSignIn.setOnClickListener {
             val signIntent = googleSignInClient.signInIntent
             startActivityForResult(signIntent,RC_SIGN_IN)
+            showLoadingView()
         }
 //        imageViewGoogleSignIn.setOnClickListener {
 //            val signIntent = googleSignInClient.signInIntent
@@ -69,11 +76,11 @@ class loginPage : AppCompatActivity() {
         firebaseAuth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
+                    hideLoadingView()
                     val user = firebaseAuth.currentUser
                     val userEmail = user?.email
                     UserData.getInstance().userId = user?.uid
                     Toast.makeText(this, "Welcome", Toast.LENGTH_SHORT).show()
-
                     // Intent for Homescreen activity
                     UserData.getInstance().userEmail = userEmail
                     // Intent for ProfileRegister activity
@@ -101,5 +108,12 @@ class loginPage : AppCompatActivity() {
                 Log.w(TAG,"Google sign in failed",e)
             }
         }
+    }
+    private fun hideLoadingView() {
+        loadingView.visibility = View.GONE
+    }
+
+    private fun showLoadingView() {
+        loadingView.visibility = View.VISIBLE
     }
 }

@@ -11,6 +11,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Base64
+import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -38,11 +39,13 @@ class profileRegister : AppCompatActivity() {
     private lateinit var imageViewProfileRegister :ImageView
     private lateinit var firebaseStorage: FirebaseStorage
     private lateinit var saveButtonProfileRegister : AppCompatButton
+    private lateinit var loadingView: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile_register)
         FirebaseApp.initializeApp(this)
+        loadingView = findViewById<View>(R.id.loadingView)
         firebaseStorage = FirebaseStorage.getInstance()
         val displayNameProfileRegister  = findViewById<EditText>(R.id.displayNameProfileRegister)
         saveButtonProfileRegister = findViewById<AppCompatButton>(R.id.saveButtonProfileRegister)
@@ -51,7 +54,11 @@ class profileRegister : AppCompatActivity() {
             openImagePicker()
         }
         val imageViewProfileRegister: ImageView = findViewById(R.id.imageViewProfileRegister)
+
+
+
         saveButtonProfileRegister.setOnClickListener {
+            showLoadingView()
             val userName = displayNameProfileRegister.text.toString().trim()
             if (userName.isEmpty()) {
                 Toast.makeText(this, "Please enter your name", Toast.LENGTH_SHORT).show()
@@ -103,6 +110,7 @@ class profileRegister : AppCompatActivity() {
                     val imageUrll = downloadUri.toString()
                     UserData.getInstance().imageUrl = imageUrll
                     UserDataLiveData.imageUrlLiveData.postValue(imageUrll)
+                    hideLoadingView()
                 } else {
                     Toast.makeText(this, "Image URL is null", Toast.LENGTH_SHORT).show()
                 }
@@ -135,9 +143,13 @@ class profileRegister : AppCompatActivity() {
     }
 
 
+    private fun hideLoadingView() {
+        loadingView.visibility = View.GONE
+    }
 
-
-
+    private fun showLoadingView() {
+        loadingView.visibility = View.VISIBLE
+    }
 
 }
 
