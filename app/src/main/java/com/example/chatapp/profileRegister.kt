@@ -15,6 +15,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
+
 import com.google.common.base.MoreObjects.ToStringHelper
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
@@ -23,23 +24,20 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import java.lang.RuntimeException
+
+//import com.google.firebase.auth.FirebaseAuth
+
+//import com.google.firebase.firestore.FirebaseFirestore
+//import com.google.firebase.storage.FirebaseStorage
+//import com.google.firebase.storage.StorageReference
+
 import java.util.UUID
 class profileRegister : AppCompatActivity() {
 //    private lateinit var fireBaseAuth : FirebaseAuth
     private val SELECT_IMAGE_REQUEST = 1
     private lateinit var imageViewProfileRegister :ImageView
-    private lateinit var userNameprofileRegister: String
-
-
-
-    private lateinit var imageUriProfileRegister : Uri
     private lateinit var firebaseStorage: FirebaseStorage
     private lateinit var saveButtonProfileRegister : AppCompatButton
-    private   var PICK_IMAGE_REQUEST_CODE = 101
-    private val storageReference: StorageReference by lazy {
-        FirebaseStorage.getInstance().reference.child("images")
-    }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

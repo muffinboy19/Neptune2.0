@@ -12,6 +12,7 @@ import com.google.firebase.database.DatabaseReference
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import java.util.UUID
@@ -26,10 +27,46 @@ class Homescreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_page)
+
+
+
+
+
+
         FirebaseApp.initializeApp(this)
+        auth = FirebaseAuth.getInstance()
+        mdref  = FirebaseDatabase.getInstance().reference.child("User")
+
+
+
+
+
         val username = UserData.getInstance().username
         val userEmail = UserData.getInstance().userEmail
         val userId = UserData.getInstance().userId
+        val userImageUrl = UserData.getInstance().imageUrl
+
+
+        val user = hashMapOf(
+            "userId" to userId,
+            "username" to username,
+            "userEmail" to userEmail,
+            "userImageUrl" to userImageUrl
+        )
+
+
+        if (userId != null) {
+            db.collection("users").document(userId)
+                .set(user)
+                .addOnSuccessListener {
+                    Log.d("Homescreen", "User data added to Firestore.")
+                }
+                .addOnFailureListener { e ->
+                    Log.e("Homescreen", "Error adding user data to Firestore: $e")
+                }
+        }
+
+
 
 
     }
