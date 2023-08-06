@@ -68,6 +68,15 @@ class profileRegister : AppCompatActivity() {
             }
         }
     }
+    private fun adjustImageViewSize(imageView: ImageView, bitmap: Bitmap) {
+        val targetWidth = imageView.width
+        val aspectRatio = bitmap.width.toFloat() / bitmap.height.toFloat()
+        val targetHeight = (targetWidth / aspectRatio).toInt()
+        val layoutParams = imageView.layoutParams
+        layoutParams.height = targetHeight
+        imageView.layoutParams = layoutParams
+        imageView.scaleType = ImageView.ScaleType.FIT_XY // You can also use FIT_CENTER if you prefer
+    }
 
     private fun uploadImageToFirebaseStorage(bitmap: Bitmap) {
         val storageRef: StorageReference = firebaseStorage.reference
@@ -117,6 +126,7 @@ class profileRegister : AppCompatActivity() {
             if (imageUri != null) {
                 val imageBitmap = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
                 imageViewProfileRegister.setImageBitmap(imageBitmap)
+                adjustImageViewSize(imageViewProfileRegister, imageBitmap)
                 Toast.makeText(this, "Image SET", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(this, "Image NOT SET", Toast.LENGTH_SHORT).show()

@@ -10,9 +10,10 @@
         android:id="@+id/textView4"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/roboto_medium"
         android:gravity="center"
         android:text="Profile info"
-        android:fontFamily="@font/roboto_medium"
         android:textColor="#0000ff"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -22,43 +23,31 @@
 
     <TextView
         android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="19dp"
-        android:layout_marginEnd="12dp"
+        android:layout_width="300dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="24dp"
         android:fontFamily="@font/roboto_medium"
         android:text="Please provide your name and an optional profile"
+        android:textAlignment="center"
         android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
-    <TextView
-        android:id="@+id/textView6"
-        android:fontFamily="@font/roboto_medium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="182dp"
-        android:layout_marginEnd="183dp"
-        android:text="photo"
-        android:textSize="17sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
-
     <ImageView
         android:id="@+id/imageViewProfileRegister"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginStart="170dp"
-        android:layout_marginTop="69dp"
-        android:layout_marginEnd="146dp"
-        android:background="@drawable/roundcornerwhite"
+        android:layout_marginBottom="200dp"
+        android:background="@drawable/grey_backround"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/upload_fill0_wght400_grad0_opsz48"
+        app:layout_constraintBottom_toTopOf="@+id/displayNameProfileRegister"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/saveButtonProfileRegister"
@@ -66,29 +55,30 @@
         android:layout_height="35dp"
         android:layout_marginStart="165dp"
         android:layout_marginEnd="166dp"
-        android:layout_marginBottom="115dp"
+        android:layout_marginBottom="80dp"
         android:background="@drawable/roundcornergreen"
-        android:text="Next"
         android:fontFamily="@font/roboto_medium"
-        android:textSize="18sp"
+        android:text="Next"
         android:textAllCaps="false"
         android:textColor="@color/white"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/displayNameProfileRegister"
-        android:layout_width="340dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="86dp"
-        android:layout_marginEnd="55dp"
-        android:backgroundTint="#0000ff"
+        android:layout_width="300dp"
+        android:layout_height="36sp"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/namebar"
+        android:elevation="2dp"
         android:fontFamily="@font/roboto_medium"
-        android:hint="Type your name here"
-        android:paddingLeft="4sp"
+        android:hint="Enter  your name here"
+
+        android:paddingLeft="10sp"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/saveButtonProfileRegister"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewProfileRegister" />
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

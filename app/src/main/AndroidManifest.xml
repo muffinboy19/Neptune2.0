@@ -31,13 +31,13 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".WelcomPage"
-            android:exported="false" />
-        <activity
             android:name=".profileRegister"
             android:exported="false" />
         <activity
             android:name=".loginPage"
+            android:exported="false" />
+        <activity
+            android:name=".WelcomPage"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
