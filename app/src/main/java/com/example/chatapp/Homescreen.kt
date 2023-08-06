@@ -44,29 +44,33 @@ class Homescreen : AppCompatActivity() {
         val username = UserData.getInstance().username
         val userEmail = UserData.getInstance().userEmail
         val userId = UserData.getInstance().userId
-        val userImageUrl = UserData.getInstance().imageUrl
 
 
-        val user = hashMapOf(
-            "userId" to userId,
-            "username" to username,
-            "userEmail" to userEmail,
-            "userImageUrl" to userImageUrl
-        )
+        UserDataLiveData.imageUrlLiveData.observe(this) { imageUrl ->
+            if (imageUrl != null) {
+                // The image URL is available, you can use it here
+                val user = hashMapOf(
+                    "userId" to userId,
+                    "username" to username,
+                    "userEmail" to userEmail,
+                    "userImageUrl" to imageUrl
+                )
 
-
-        if (userId != null) {
-            db.collection("users").document(userId)
-                .set(user)
-                .addOnSuccessListener {
-                    Log.d("Homescreen", "User data added to Firestore.")
+                if (userId != null) {
+                    db.collection("users").document(userId)
+                        .set(user)
+                        .addOnSuccessListener {
+                            Log.d("Homescreen", "User data added to Firestore.")
+                        }
+                        .addOnFailureListener { e ->
+                            Log.e("Homescreen", "Error adding user data to Firestore: $e")
+                        }
                 }
-                .addOnFailureListener { e ->
-                    Log.e("Homescreen", "Error adding user data to Firestore: $e")
-                }
+            } else {
+                // The image URL is null, handle the case if needed
+                Toast.makeText(this, "Image URL is null", Toast.LENGTH_SHORT).show()
+            }
         }
-
-
 
 
     }

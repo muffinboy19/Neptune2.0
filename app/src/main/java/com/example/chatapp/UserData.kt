@@ -6,7 +6,6 @@ class UserData private constructor() {
 
     var username: String? = null
     var userEmail: String? = null
-    var imageUri: String? = null
     var imageUrl: String? = null
     var userId: String? = null
 

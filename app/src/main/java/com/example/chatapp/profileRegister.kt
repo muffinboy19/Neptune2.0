@@ -70,7 +70,6 @@ class profileRegister : AppCompatActivity() {
     }
 
     private fun uploadImageToFirebaseStorage(bitmap: Bitmap) {
-
         val storageRef: StorageReference = firebaseStorage.reference
 
         // Create a reference to the image file with a unique name (e.g., using timestamp)
@@ -92,19 +91,18 @@ class profileRegister : AppCompatActivity() {
                 if (task.isSuccessful) {
                     // Get the image URL and store it in a variable
                     val downloadUri = task.result
-                    val imageUrl = downloadUri.toString()
-                    UserData.getInstance().imageUrl  = imageUrl
+                    val imageUrll = downloadUri.toString()
+                    UserData.getInstance().imageUrl = imageUrll
+                    UserDataLiveData.imageUrlLiveData.postValue(imageUrll)
+                } else {
+                    Toast.makeText(this, "Image URL is null", Toast.LENGTH_SHORT).show()
                 }
             }
         }.addOnFailureListener { e ->
-            Toast.makeText(this,"Iamge upload error ",Toast.LENGTH_SHORT).show()
-        }
-        // Add this code in the uploadImageToFirebaseStorage function
-        uploadTask.addOnFailureListener { e ->
             Toast.makeText(this, "Image Upload Failed: ${e.message}", Toast.LENGTH_SHORT).show()
         }
-
     }
+
 
 
     private fun openImagePicker() {
