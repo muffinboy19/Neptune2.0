@@ -4,15 +4,66 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#CF9292"
+    android:background="#f9fafe"
     tools:context=".Homescreen">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rc"
-        android:layout_width="409dp"
-        android:layout_height="500dp"
-        android:background="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="#f9fafe"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+    <ImageView
+        android:id="@+id/button"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="300dp"
+        android:layout_marginTop="664dp"
+        android:background="@drawable/ciricle"
+        android:elevation="1dp"
+        android:padding="5dp"
+        android:src="@drawable/add_fill0_wght400_grad0_opsz48"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="messages"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/profileIcon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toEndOf="@+id/textView8"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_launcher_background" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="19dp"
+        android:layout_marginTop="46dp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="Chats"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

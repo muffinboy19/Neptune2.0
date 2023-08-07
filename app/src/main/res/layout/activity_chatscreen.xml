@@ -4,31 +4,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="@color/white"
     tools:context=".ChatScreen">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatt"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="620dp"
         android:layout_above="@id/ll"
         android:layout_alignParentTop="true"
+        android:layout_marginTop="408dp"
         android:layout_marginBottom="12dp"
         app:layout_constraintBottom_toTopOf="@+id/ll"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar2"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3"
         app:layout_constraintVertical_bias="1.0" />
 
     <LinearLayout
         android:id="@+id/ll"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_width="320dp"
+        android:layout_height="44dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="12dp"
+        android:elevation="2dp"
         android:orientation="horizontal"
-        android:paddingHorizontal="20dp"
+        android:background="@drawable/messagebox"
+        android:paddingStart="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -38,39 +41,66 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="10"
-            android:background="@drawable/messagebox"
+            android:background="#FAFAFA"
             android:ems="10"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white"
-            android:hint="Type a message"
+            android:fontFamily="@font/roboto_medium"
+            android:hint="Type something....."
             android:inputType="text"
-            android:paddingStart="10dp" />
+            android:paddingStart="10dp"
+            android:textColor="#BABCBD"
+            android:textColorHint="#BABCBD" />
 
         <ImageView
             android:id="@+id/send3"
-            android:layout_width="30dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="2dp"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="20dp"
             android:layout_weight="1"
+            android:background="@drawable/ciricle"
             android:paddingHorizontal="3dp"
-            android:paddingVertical="0dp"
-            android:paddingStart="2dp"
+            android:layout_marginVertical="2dp"
+            android:paddingVertical="5dp"
+            android:paddingStart="10dp"
             android:scaleType="fitXY"
-            android:src="@drawable/downarrow" />
+            android:src="@drawable/send_fill0_wght400_grad0_opsz48" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/toolbar2"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_marginStart="1dp"
-        android:textSize="24sp"
-        android:gravity="center"
-        android:textColor="@color/white"
-        android:layout_marginEnd="1dp"
-        android:background="@drawable/rounded_not_borde"
-        app:layout_constraintEnd_toEndOf="parent"
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toEndOf="@+id/prev"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_launcher_background" />
+
+    <ImageView
+        android:id="@+id/prev"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/arrowbackground"
+        android:paddingVertical="8dp"
+        android:paddingStart="10dp"
+        android:scaleType="fitXY"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/arrow_back_ios_fill0_wght400_grad0_opsz48" />
+
+    <TextView
+        android:id="@+id/UserNameDisplayChatScreen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="TextView"
+        android:textColor="#84888B"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/imageView3"
         app:layout_constraintTop_toTopOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
