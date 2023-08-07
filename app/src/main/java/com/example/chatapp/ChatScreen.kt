@@ -38,6 +38,14 @@ class ChatScreen : AppCompatActivity() {
         val UserNameDisplayChatScreen = findViewById<TextView>(R.id.UserNameDisplayChatScreen)
         val name = intent.getStringExtra("name")
         val Recciveruid = intent.getStringExtra("uid")
+
+
+
+
+        val displaydp = findViewById<ImageView>(R.id.displaydp)
+
+
+
         mdbref = FirebaseDatabase.getInstance().getReference()
         val prev = findViewById<ImageView>(R.id.prev)
         prev.setOnClickListener {
@@ -47,8 +55,15 @@ class ChatScreen : AppCompatActivity() {
 
 
         val senderUId = FirebaseAuth.getInstance().currentUser?.uid
-        senderRoom = Recciveruid + senderUId
-        recciverRoom = senderUId + Recciveruid
+        if (Recciveruid != null && senderUId != null) {
+            if (Recciveruid < senderUId) {
+                senderRoom = Recciveruid + senderUId
+            } else {
+                senderRoom = senderUId + Recciveruid
+            }
+            recciverRoom = Recciveruid
+        }
+
         UserNameDisplayChatScreen.text = name
 
 
@@ -74,12 +89,15 @@ class ChatScreen : AppCompatActivity() {
                         messageList.add(messaage!!)
                     }
                     messageAdapter.notifyDataSetChanged()
-                    messageRecyclerView.smoothScrollToPosition(messageAdapter.itemCount - 1)
-                    messageRecyclerView.postDelayed({
+
+
+
+                    if (messageAdapter.itemCount > 0) {
                         messageRecyclerView.smoothScrollToPosition(messageAdapter.itemCount - 1)
-                    }, 200)
-
-
+                        messageRecyclerView.postDelayed({
+                            messageRecyclerView.smoothScrollToPosition(messageAdapter.itemCount - 1)
+                        }, 200)
+                    }
                 }
 
                 override fun onCancelled(error: DatabaseError) {

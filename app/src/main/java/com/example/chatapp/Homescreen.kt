@@ -5,6 +5,7 @@ import android.content.ContentValues.TAG
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.FirebaseFirestore
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +15,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import android.util.Log
+import android.widget.ImageView
 import android.widget.Toast
 import com.google.firebase.database.FirebaseDatabase
 
@@ -30,6 +32,11 @@ class Homescreen : AppCompatActivity() {
         setContentView(R.layout.activity_home_page)
         FirebaseApp.initializeApp(this)
         auth = FirebaseAuth.getInstance()
+        val profileIcon = findViewById<ImageView>(R.id.profileIcon)
+
+        profileIcon.setOnClickListener {
+            Toast.makeText(this,"You are cute",Toast.LENGTH_SHORT).show()
+        }
 
 
 
@@ -42,7 +49,7 @@ class Homescreen : AppCompatActivity() {
         var myUrl: String = ""
         UserDataLiveData.imageUrlLiveData.observe(this) { imageUrl ->
             if (imageUrl != null) {
-                // The image URL is available, you can use it here
+                Picasso.get().load(imageUrl).into(profileIcon)
                 myUrl = imageUrl
                 val user = hashMapOf(
                     "userId" to userId,
@@ -87,10 +94,10 @@ class Homescreen : AppCompatActivity() {
             if (snapshot != null) {
                 for (document in snapshot) {
                     val cu = document.toObject(ChatUser::class.java)
-                    if (auth.currentUser?.uid == cu.uid) {
-
-                    } else {
+                    if (auth.currentUser?.uid != cu.uid) {
                         userList.add(cu)
+                    } else {
+
                     }
                 }
             }
