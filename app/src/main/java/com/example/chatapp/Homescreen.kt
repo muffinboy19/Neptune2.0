@@ -3,6 +3,7 @@ package com.example.chatapp
 
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -23,75 +24,78 @@ import com.google.firebase.database.FirebaseDatabase
 
 
 class Homescreen : AppCompatActivity() {
-    private val db  = FirebaseFirestore.getInstance()
-    private lateinit var auth:FirebaseAuth
-    private lateinit var mdref :DatabaseReference
+    private val db = FirebaseFirestore.getInstance()
+    private lateinit var auth: FirebaseAuth
+    private lateinit var mdref: DatabaseReference
     private lateinit var rc: RecyclerView
     private lateinit var userList: ArrayList<ChatUser>
-    private lateinit var ChatUserAdapterName :ChatUserAdapter
+    private lateinit var ChatUserAdapterName: ChatUserAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_page)
-
-
-
         val userId = MyUserData.getInstance().userId
         val username = MyUserData.getInstance().username
-
-
-
-
-
-
-
-
-
-
-        val profileIcon = findViewById<ImageView>(R.id.profileIcon)
         rc = findViewById(R.id.rc)
         FirebaseApp.initializeApp(this)
-        auth = FirebaseAuth.getInstance()
 
+        val logout = findViewById<ImageView>(R.id.logout)
+        logout.setOnClickListener {
+            // Clear authentication status
+            val sharedPrefs = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+            val editor = sharedPrefs.edit()
+            editor.putBoolean("isLoggedIn", false)
+            editor.apply()
 
-        profileIcon.setOnClickListener {
-            Toast.makeText(this,"You are cute",Toast.LENGTH_SHORT).show()
+            // Sign out from Firebase
+            FirebaseAuth.getInstance().signOut()
+
+            // Navigate back to login page
+            val loginIntent = Intent(this, WelcomPage::class.java)
+            startActivity(loginIntent)
+            finish() // Optional: C
+
         }
 
+        auth = FirebaseAuth.getInstance()
+        userList = ArrayList()
+        ChatUserAdapterName = ChatUserAdapter(this, userList)
+        rc.layoutManager = LinearLayoutManager(this)
+        rc.adapter = ChatUserAdapterName
 
+        val profileIcon = findViewById<ImageView>(R.id.profileIcon)
 
-        mdref = FirebaseDatabase.getInstance().getReference("users")
-
+        profileIcon.setOnClickListener {
+            Toast.makeText(this, "You are cute", Toast.LENGTH_SHORT).show()
+        }
         UserDataLiveData.imageUrlLiveData.observe(this) { imageUrl ->
             if (imageUrl != null) {
-                Picasso.get().load(imageUrl).into(profileIcon)
+
 
                 val user = hashMapOf(
                     "userId" to userId,
                     "username" to username,
                     "userImageUrl" to imageUrl
                 )
+                Picasso.get()
+                    .load(imageUrl)
+                    .into(profileIcon)
+
 
                 if (userId != null) {
                     // Use Realtime Database to store the data
                     mdref.child(userId).setValue(user)
                         .addOnSuccessListener {
-                            Toast.makeText(this, "Added to Realtime Database", Toast.LENGTH_SHORT).show()
                         }
                         .addOnFailureListener { e ->
                             Toast.makeText(this, "Upload failed bro", Toast.LENGTH_SHORT).show()
                         }
                 }
             } else {
-                // The image URL is null, handle the case if needed
                 Toast.makeText(this, "Image URL is null", Toast.LENGTH_SHORT).show()
             }
         }
 
-        userList = ArrayList()
-        ChatUserAdapterName = ChatUserAdapter(this, userList)
 
-        rc.layoutManager = LinearLayoutManager(this)
-        rc.adapter = ChatUserAdapterName
 
         mdref = FirebaseDatabase.getInstance().getReference("users")
         mdref.addValueEventListener(object : ValueEventListener {
@@ -101,7 +105,7 @@ class Homescreen : AppCompatActivity() {
                 val currentUserUid = MyUserData.getInstance().userId
                 for (userSnapshot in snapshot.children) {
                     val cu = userSnapshot.getValue(ChatUser::class.java)
-                    if (cu != null && currentUserUid != cu.UserId&& currentUserUid != userSnapshot.key) {
+                    if (cu != null && currentUserUid != cu.UserId && currentUserUid != userSnapshot.key) {
                         userList.add(cu)
                     }
                 }
@@ -109,19 +113,8 @@ class Homescreen : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Log.w(TAG, "Listen failed.", error.toException())
+                Toast.makeText(this@Homescreen, "Database Error", Toast.LENGTH_SHORT).show()
             }
         })
-
-
-
     }
-
-//     private  fun addUserToTheDataBase(name: String, email: String, photoUrl: String, uid: String) {
-//        mdref = FirebaseDatabase.getInstance().getReference("users")
-//        mdref.child(uid).setValue(User(name, photoUrl, uid))
-//    }
-
-
-
 }

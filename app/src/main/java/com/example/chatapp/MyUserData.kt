@@ -7,6 +7,7 @@ class MyUserData private constructor() {
     var imageUrl: String? = null
     var userId: String? = null
 
+
     companion object {
         @Volatile
         private var instance: MyUserData? = null

@@ -1,6 +1,7 @@
 package com.example.chatapp
 
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -35,17 +36,34 @@ class loginPage : AppCompatActivity() {
 
         loadingView = findViewById<View>(R.id.loadingView)
         FirebaseApp.initializeApp(this)
+
+
+
+
+
+        // MainActivity or Application class
+
+
+
+
+
+
+
+
+
+
+
+
 //  code for the register page
         val registerLoginPage = findViewById<AppCompatButton>(R.id.registerLoginPage)
-        registerLoginPage.setOnClickListener{
+        registerLoginPage.setOnClickListener {
 
 
         }
 
 
-
 //  code for google singin
-        val  loginWithGoogle = findViewById<AppCompatButton>(R.id.loginWithGoogle)
+        val loginWithGoogle = findViewById<AppCompatButton>(R.id.loginWithGoogle)
         firebaseAuth = FirebaseAuth.getInstance()
         val imageViewGoogleSignIn: ImageView = findViewById(R.id.imageLoginWithGoogle)
 
@@ -56,19 +74,15 @@ class loginPage : AppCompatActivity() {
         googleSignInClient = GoogleSignIn.getClient(this, gso)
         loginWithGoogle.setOnClickListener {
             val signIntent = googleSignInClient.signInIntent
-            startActivityForResult(signIntent,RC_SIGN_IN)
+            startActivityForResult(signIntent, RC_SIGN_IN)
             showLoadingView()
         }
 
         imageViewGoogleSignIn.setOnClickListener {
             val signIntent = googleSignInClient.signInIntent
-            startActivityForResult(signIntent,RC_SIGN_IN)
+            startActivityForResult(signIntent, RC_SIGN_IN)
             showLoadingView()
         }
-//        imageViewGoogleSignIn.setOnClickListener {
-//            val signIntent = googleSignInClient.signInIntent
-//            startActivityForResult(signIntent,RC_SIGN_IN)
-//        }
     }
 
     private fun firebaseAuthWithGoogle(account: GoogleSignInAccount?) {
@@ -83,6 +97,12 @@ class loginPage : AppCompatActivity() {
                     Toast.makeText(this, "Welcome", Toast.LENGTH_SHORT).show()
                     // Intent for Homescreen activity
                     MyUserData.getInstance().userEmail = userEmail
+
+                    val sharedPrefs = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+                    val editor = sharedPrefs.edit()
+                    editor.putBoolean("isLoggedIn", true)
+                    editor.apply()
+
                     // Intent for ProfileRegister activity
                     val profileRegisterIntent = Intent(this, profileRegister::class.java)
                     startActivity(profileRegisterIntent)
@@ -96,19 +116,19 @@ class loginPage : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(requestCode== RC_SIGN_IN){
+        if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
 //            handleSignInResult(task)
-            try{
+            try {
                 val account = task.getResult(ApiException::class.java)
                 firebaseAuthWithGoogle(account)
-            }
-            catch (e:ApiException){
+            } catch (e: ApiException) {
 //                Toast.makeText(this,"Failed", Toast.LENGTH_SHORT).show()
-                Log.w(TAG,"Google sign in failed",e)
+                Log.w(TAG, "Google sign in failed", e)
             }
         }
     }
+
     private fun hideLoadingView() {
         loadingView.visibility = View.GONE
     }

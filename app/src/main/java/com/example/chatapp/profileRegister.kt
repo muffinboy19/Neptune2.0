@@ -34,12 +34,13 @@ import java.lang.RuntimeException
 //import com.google.firebase.storage.StorageReference
 
 import java.util.UUID
+
 class profileRegister : AppCompatActivity() {
-//    private lateinit var fireBaseAuth : FirebaseAuth
+    //    private lateinit var fireBaseAuth : FirebaseAuth
     private val SELECT_IMAGE_REQUEST = 1
-    private lateinit var imageViewProfileRegister :ImageView
+    private lateinit var imageViewProfileRegister: ImageView
     private lateinit var firebaseStorage: FirebaseStorage
-    private lateinit var saveButtonProfileRegister : AppCompatButton
+    private lateinit var saveButtonProfileRegister: AppCompatButton
     private lateinit var loadingView: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,7 +49,7 @@ class profileRegister : AppCompatActivity() {
         FirebaseApp.initializeApp(this)
         loadingView = findViewById<View>(R.id.loadingView)
         firebaseStorage = FirebaseStorage.getInstance()
-        val displayNameProfileRegister  = findViewById<EditText>(R.id.displayNameProfileRegister)
+        val displayNameProfileRegister = findViewById<EditText>(R.id.displayNameProfileRegister)
         saveButtonProfileRegister = findViewById<AppCompatButton>(R.id.saveButtonProfileRegister)
         imageViewProfileRegister = findViewById<ImageView>(R.id.imageViewProfileRegister)
         imageViewProfileRegister.setOnClickListener {
@@ -84,6 +85,7 @@ class profileRegister : AppCompatActivity() {
         }
 
     }
+
     private fun adjustImageViewSize(imageView: ImageView, bitmap: Bitmap) {
         val targetWidth = imageView.width
         val aspectRatio = bitmap.width.toFloat() / bitmap.height.toFloat()
@@ -91,7 +93,8 @@ class profileRegister : AppCompatActivity() {
         val layoutParams = imageView.layoutParams
         layoutParams.height = targetHeight
         imageView.layoutParams = layoutParams
-        imageView.scaleType = ImageView.ScaleType.FIT_XY // You can also use FIT_CENTER if you prefer
+        imageView.scaleType =
+            ImageView.ScaleType.FIT_XY // You can also use FIT_CENTER if you prefer
     }
 
     private fun uploadImageToFirebaseStorage(bitmap: Bitmap) {
@@ -118,11 +121,13 @@ class profileRegister : AppCompatActivity() {
             Toast.makeText(this, "Image Upload Failed: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
+
     private fun openImagePicker() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         startActivityForResult(intent, SELECT_IMAGE_REQUEST)
 
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK && requestCode == SELECT_IMAGE_REQUEST) {

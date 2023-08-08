@@ -12,7 +12,7 @@
         android:id="@+id/agreeAndContinueButton"
         android:layout_width="250dp"
         android:layout_height="48dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/roundcornergreen"
         android:elevation="2dp"
         android:fontFamily="@font/roboto_medium"
@@ -28,9 +28,9 @@
         android:id="@+id/linearLayoutCompat"
         android:layout_width="160dp"
         android:layout_height="48dp"
-        android:elevation="2dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="50dp"
         android:background="@drawable/round_white"
+        android:elevation="2dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -68,7 +68,7 @@
         android:id="@+id/textView15"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="390dp"
+        android:layout_marginTop="448dp"
         android:fontFamily="@font/roboto_medium"
         android:text="Welcome to Neptune"
         android:textColor="#000000"
@@ -142,5 +142,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView13"
         app:layout_constraintTop_toBottomOf="@+id/textView15" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/conversation_rafiki" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
