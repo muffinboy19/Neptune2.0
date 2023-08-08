@@ -18,16 +18,21 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
+import com.squareup.picasso.Picasso
+import java.security.MessageDigest
 
 
 class ChatScreen : AppCompatActivity() {
-    private lateinit var messageRecyclerView: RecyclerView
+    private lateinit var chatRecyclerView: RecyclerView
     private lateinit var messageBox: EditText
     private lateinit var sendButton: ImageView
     private lateinit var messageAdapter: messageAdapter
     private lateinit var messageList: ArrayList<messaage>
     private lateinit var mdbref: DatabaseReference
+    private lateinit var mAuth: FirebaseAuth
+    private lateinit var userList : ChatUserAdapter
 
     var recciverRoom: String? = null
     var senderRoom: String? = null
@@ -35,148 +40,110 @@ class ChatScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chatscreen)
-        val UserNameDisplayChatScreen = findViewById<TextView>(R.id.UserNameDisplayChatScreen)
-        val name = intent.getStringExtra("name")
-        val Recciveruid = intent.getStringExtra("uid")
-
-
-
-
-        val displaydp = findViewById<ImageView>(R.id.displaydp)
-
-
-
         mdbref = FirebaseDatabase.getInstance().getReference()
+        val imageURL  = intent.getStringExtra("imageUrl")
+        val name = intent.getStringExtra("name")
+        val Recciveruid :String? = intent.getStringExtra("uid")
+        val senderUId :String? = FirebaseAuth.getInstance().currentUser?.uid
+        mdbref = FirebaseDatabase.getInstance().getReference()
+
+
+        val UserNameDisplayChatScreen = findViewById<TextView>(R.id.UserNameDisplayChatScreen)
+        val displaydp = findViewById<ImageView>(R.id.displaydp)
         val prev = findViewById<ImageView>(R.id.prev)
+        UserNameDisplayChatScreen.text = name
+        Picasso.get().load(imageURL).into(displaydp)
         prev.setOnClickListener {
             val intent = Intent(this, Homescreen::class.java)
             startActivity(intent)
         }
 
 
-        val senderUId = FirebaseAuth.getInstance().currentUser?.uid
-        if (Recciveruid != null && senderUId != null) {
-            if (Recciveruid < senderUId) {
-                senderRoom = Recciveruid + senderUId
-            } else {
-                senderRoom = senderUId + Recciveruid
-            }
-            recciverRoom = Recciveruid
-        }
 
-        UserNameDisplayChatScreen.text = name
+        senderRoom = senderUId + Recciveruid
+        recciverRoom = Recciveruid + senderUId
 
+        Toast.makeText(this,"$senderRoom",Toast.LENGTH_SHORT).show()
 
+        Toast.makeText(this,"$recciverRoom",Toast.LENGTH_SHORT).show()
 
-        messageList = ArrayList()
-        messageAdapter = messageAdapter(this, messageList)
-        messageRecyclerView = findViewById(R.id.chatt)
         messageBox = findViewById(R.id.messageBox)
+        chatRecyclerView = findViewById(R.id.chatt)
         sendButton = findViewById(R.id.send3)
+        messageList =  ArrayList()
+        messageAdapter = messageAdapter(this,messageList)
 
+        chatRecyclerView.layoutManager= LinearLayoutManager(this)
+        chatRecyclerView.adapter =messageAdapter
+        mdbref.child("chats").child(senderRoom!!).child("messages")
+            .addValueEventListener(object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
 
-        messageRecyclerView.layoutManager = LinearLayoutManager(this)
-        messageRecyclerView.adapter = messageAdapter
+                    messageList.clear()
+                    for( postSnap in snapshot.children){
+                        val boxo = postSnap.getValue(messaage::class.java)
+                    messageList.add(boxo!!)
+                    }
+                    messageAdapter.notifyDataSetChanged()
+                }
 
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+            })
 
+        // Inside your onCreate method in ChatScreen activity
+// ... (Previous code)
 
-        mdbref.child("chats").child(senderRoom!!).child("message")
+// Set up the listener for the receiver's chat room
+        mdbref.child("chats").child(recciverRoom!!).child("messages")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     messageList.clear()
                     for (postSnap in snapshot.children) {
-                        val messaage = postSnap.getValue(messaage::class.java)
-                        messageList.add(messaage!!)
+                        val boxo = postSnap.getValue(messaage::class.java)
+                        messageList.add(boxo!!)
                     }
                     messageAdapter.notifyDataSetChanged()
-
-
-
-                    if (messageAdapter.itemCount > 0) {
-                        messageRecyclerView.smoothScrollToPosition(messageAdapter.itemCount - 1)
-                        messageRecyclerView.postDelayed({
-                            messageRecyclerView.smoothScrollToPosition(messageAdapter.itemCount - 1)
-                        }, 200)
-                    }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    // Handle onCancelled event if needed
-                    Toast.makeText(
-                        this@ChatScreen,
-                        "Database error: ${error.message}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    // Handle onCancelled
                 }
-
-
             })
+
+// ... (Rest of your code)
+
+
+
+
+
         sendButton.setOnClickListener {
-//
-            // here the messaeg is addeed to the data base
-            val message: String = messageBox.text.toString().trim()
 
-            val messageObject = messaage(message, senderUId)
-            mdbref.child("chats").child(senderRoom!!).child("message").push()
-                .setValue(messageObject).addOnSuccessListener {
 
-                }
-            mdbref.child("chats").child(recciverRoom!!).child("message").push()
-                .setValue(messageObject).addOnSuccessListener {
+            val message = messageBox.text.toString()
+            val messageObject = messaage(message,senderUId)
+
+
+            mdbref.child("chats").child(senderRoom!!).child("messages").push()
+                .setValue(messageObject)
+                .addOnSuccessListener {
 
                 }
 
-            messageAdapter.notifyDataSetChanged()
+            mdbref.child("chats").child(recciverRoom!!).child("messages").push()
+                .setValue(messageObject)
+                .addOnSuccessListener {
+
+                }
+
+
+
             messageBox.setText("")
-            // Get the message text
-//            val message: String = messageBox.text.toString()
-//
-//            // Check if the message is not empty
-//            if (message.isNotEmpty()) {
-//                val messageObject = messaage(message, senderUId)
-//
-//                // Use addOnCompleteListener to handle successful completion
-//                mdbref.child("chats").child(senderRoom!!).child("message").push()
-//                    .setValue(messageObject)
-//                    .addOnCompleteListener { task ->
-//                        if (task.isSuccessful) {
-//                            // Message sent successfully
-//                            Toast.makeText(this@ChatScreen, "Message sent successfully", Toast.LENGTH_SHORT).show()
-//                        } else {
-//                            // Failed to send message
-//                            Toast.makeText(this@ChatScreen, "Failed to send message", Toast.LENGTH_SHORT).show()
-//                        }
-//                    }
-//                    .addOnFailureListener { e ->
-//                        // Handle failure, if any
-//                        Toast.makeText(this@ChatScreen, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
-//                    }
-//
-//                mdbref.child("chats").child(recciverRoom!!).child("message").push()
-//                    .setValue(messageObject)
-//                    .addOnCompleteListener { task ->
-//                        if (task.isSuccessful) {
-//                            // Message sent successfully
-//                            Toast.makeText(this@ChatScreen, "Message sent successfully", Toast.LENGTH_SHORT).show()
-//                        } else {
-//                            // Failed to send message
-//                            Toast.makeText(this@ChatScreen, "Failed to send message", Toast.LENGTH_SHORT).show()
-//                        }
-//                    }
-//                    .addOnFailureListener { e ->
-//                        // Handle failure, if any
-//                        Toast.makeText(this@ChatScreen, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
-//                    }
-//
-//                // Clear the message box after sending
-//                messageBox.setText("")
-//            } else {
-//                Toast.makeText(this@ChatScreen, "Please enter a message", Toast.LENGTH_SHORT).show()
-//            }
-//        }
-
         }
-
-
     }
 }
+
+
+
+

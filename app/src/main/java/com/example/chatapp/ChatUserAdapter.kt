@@ -13,7 +13,12 @@ import com.squareup.picasso.Picasso
 
 
 
-class ChatUserAdapter(val context: Context,val ChatuserList : ArrayList<ChatUser>): RecyclerView.Adapter<ChatUserAdapter.ChatUserViewHodler>() {
+class ChatUserAdapter(val context: Context,val ChatuserList : ArrayList<ChatUser>,val listener: OnUserClickListener): RecyclerView.Adapter<ChatUserAdapter.ChatUserViewHodler>() {
+
+    interface OnUserClickListener {
+        fun onUserClick(uid: String)
+    }
+
     class ChatUserViewHodler(itemView: View) :RecyclerView.ViewHolder(itemView){
         val name_user = itemView.findViewById<TextView>(R.id.name)
         val userDp = itemView.findViewById<ImageView>(R.id.dp)
@@ -35,7 +40,8 @@ class ChatUserAdapter(val context: Context,val ChatuserList : ArrayList<ChatUser
         holder.itemView.setOnClickListener{
             val intent = Intent(context,ChatScreen::class.java)
             intent.putExtra("name",current_user.username)
-            intent.putExtra("uid",current_user.uid)
+            intent.putExtra("imageUrl",current_user.userImageUrl)
+            listener.onUserClick(current_user.uid)
             context.startActivity(intent)
 
         }

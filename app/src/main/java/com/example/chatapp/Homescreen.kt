@@ -1,7 +1,9 @@
 package com.example.chatapp
 
 
+import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.RecyclerView
@@ -20,7 +22,7 @@ import android.widget.Toast
 import com.google.firebase.database.FirebaseDatabase
 
 
-class Homescreen : AppCompatActivity() {
+class Homescreen : AppCompatActivity(),ChatUserAdapter.OnUserClickListener {
     private val db  = FirebaseFirestore.getInstance()
     private lateinit var auth:FirebaseAuth
     private lateinit var mdref :DatabaseReference
@@ -40,17 +42,15 @@ class Homescreen : AppCompatActivity() {
 
 
 
-       // mdref  = FirebaseDatabase.getInstance().reference.child("User")
+        mdref = FirebaseDatabase.getInstance().getReference("users")
 
-
-        val username = UserData.getInstance().username
-        val userEmail = UserData.getInstance().userEmail
-        val userId = UserData.getInstance().userId
-        var myUrl: String = ""
         UserDataLiveData.imageUrlLiveData.observe(this) { imageUrl ->
             if (imageUrl != null) {
                 Picasso.get().load(imageUrl).into(profileIcon)
-                myUrl = imageUrl
+                val userId = UserData.getInstance().userId
+                val username = UserData.getInstance().username
+                val userEmail = UserData.getInstance().userEmail
+
                 val user = hashMapOf(
                     "userId" to userId,
                     "username" to username,
@@ -59,11 +59,10 @@ class Homescreen : AppCompatActivity() {
                 )
 
                 if (userId != null) {
-                    // Use Firestore to store the data
-                    db.collection("users").document(userId)
-                        .set(user)
+                    // Use Realtime Database to store the data
+                    mdref.child(userId).setValue(user)
                         .addOnSuccessListener {
-                            Toast.makeText(this, "Added to Firestore", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "Added to Realtime Database", Toast.LENGTH_SHORT).show()
                         }
                         .addOnFailureListener { e ->
                             Toast.makeText(this, "Upload failed bro", Toast.LENGTH_SHORT).show()
@@ -76,67 +75,44 @@ class Homescreen : AppCompatActivity() {
         }
 
         userList = ArrayList()
-        ChatUserAdapterName = ChatUserAdapter(this, userList)
+        ChatUserAdapterName = ChatUserAdapter(this, userList,this)
         rc = findViewById(R.id.rc)
         rc.layoutManager = LinearLayoutManager(this)
         rc.adapter = ChatUserAdapterName
 
-
-        mdref = FirebaseDatabase.getInstance().getReference()
-
-        db.collection("users").addSnapshotListener { snapshot, e ->
-            if (e != null) {
-                Log.w(TAG, "Listen failed.", e)
-                return@addSnapshotListener
-            }
-
-            userList.clear()
-            if (snapshot != null) {
-                for (document in snapshot) {
-                    val cu = document.toObject(ChatUser::class.java)
-                    if (auth.currentUser?.uid != cu.uid) {
+        mdref = FirebaseDatabase.getInstance().getReference("users")
+        mdref.addValueEventListener(object : ValueEventListener {
+            @SuppressLint("NotifyDataSetChanged")
+            override fun onDataChange(snapshot: DataSnapshot) {
+                userList.clear()
+                val currentUserUid = auth.currentUser?.uid
+                for (userSnapshot in snapshot.children) {
+                    val cu = userSnapshot.getValue(ChatUser::class.java)
+                    if (cu != null && currentUserUid != cu.uid && currentUserUid != userSnapshot.key) {
                         userList.add(cu)
-                    } else {
-
                     }
                 }
+                ChatUserAdapterName.notifyDataSetChanged()
             }
-            ChatUserAdapterName.notifyDataSetChanged()
-        }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            override fun onCancelled(error: DatabaseError) {
+                Log.w(TAG, "Listen failed.", error.toException())
+            }
+        })
 
 
 
     }
 
-    fun addUserToTheDataBase(name: String, email: String, photoUrl: String, uid: String) {
-        mdref = FirebaseDatabase.getInstance().getReference("User") // Use "User" as the node name
+     private  fun addUserToTheDataBase(name: String, email: String, photoUrl: String, uid: String) {
+        mdref = FirebaseDatabase.getInstance().getReference("users")
         mdref.child(uid).setValue(User(name, email, photoUrl, uid))
     }
 
-
-
-
-
-
-
-
+    override fun onUserClick(uid: String) {
+        val intent = Intent(this, ChatScreen::class.java)
+        intent.putExtra("uid", uid) // Pass the UID to the ChatScreen activity
+    }
 
 
 }

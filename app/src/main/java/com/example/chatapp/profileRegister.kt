@@ -61,8 +61,6 @@ class profileRegister : AppCompatActivity() {
         saveButtonProfileRegister.setOnClickListener {
             showLoadingView()
             val userName = displayNameProfileRegister.text.toString().trim()
-
-            UserDataLiveData.usernameLiveData.postValue(userName)
             if (userName.isEmpty()) {
                 Toast.makeText(this, "Please enter your name", Toast.LENGTH_SHORT).show()
             } else if (imageViewProfileRegister.drawable == null) {
