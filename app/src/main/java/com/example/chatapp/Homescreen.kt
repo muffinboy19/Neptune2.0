@@ -22,7 +22,7 @@ import android.widget.Toast
 import com.google.firebase.database.FirebaseDatabase
 
 
-class Homescreen : AppCompatActivity(),ChatUserAdapter.OnUserClickListener {
+class Homescreen : AppCompatActivity() {
     private val db  = FirebaseFirestore.getInstance()
     private lateinit var auth:FirebaseAuth
     private lateinit var mdref :DatabaseReference
@@ -32,9 +32,26 @@ class Homescreen : AppCompatActivity(),ChatUserAdapter.OnUserClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_page)
+
+
+
+        val userId = MyUserData.getInstance().userId
+        val username = MyUserData.getInstance().username
+
+
+
+
+
+
+
+
+
+
+        val profileIcon = findViewById<ImageView>(R.id.profileIcon)
+        rc = findViewById(R.id.rc)
         FirebaseApp.initializeApp(this)
         auth = FirebaseAuth.getInstance()
-        val profileIcon = findViewById<ImageView>(R.id.profileIcon)
+
 
         profileIcon.setOnClickListener {
             Toast.makeText(this,"You are cute",Toast.LENGTH_SHORT).show()
@@ -47,14 +64,10 @@ class Homescreen : AppCompatActivity(),ChatUserAdapter.OnUserClickListener {
         UserDataLiveData.imageUrlLiveData.observe(this) { imageUrl ->
             if (imageUrl != null) {
                 Picasso.get().load(imageUrl).into(profileIcon)
-                val userId = UserData.getInstance().userId
-                val username = UserData.getInstance().username
-                val userEmail = UserData.getInstance().userEmail
 
                 val user = hashMapOf(
                     "userId" to userId,
                     "username" to username,
-                    "userEmail" to userEmail,
                     "userImageUrl" to imageUrl
                 )
 
@@ -75,8 +88,8 @@ class Homescreen : AppCompatActivity(),ChatUserAdapter.OnUserClickListener {
         }
 
         userList = ArrayList()
-        ChatUserAdapterName = ChatUserAdapter(this, userList,this)
-        rc = findViewById(R.id.rc)
+        ChatUserAdapterName = ChatUserAdapter(this, userList)
+
         rc.layoutManager = LinearLayoutManager(this)
         rc.adapter = ChatUserAdapterName
 
@@ -85,10 +98,10 @@ class Homescreen : AppCompatActivity(),ChatUserAdapter.OnUserClickListener {
             @SuppressLint("NotifyDataSetChanged")
             override fun onDataChange(snapshot: DataSnapshot) {
                 userList.clear()
-                val currentUserUid = auth.currentUser?.uid
+                val currentUserUid = MyUserData.getInstance().userId
                 for (userSnapshot in snapshot.children) {
                     val cu = userSnapshot.getValue(ChatUser::class.java)
-                    if (cu != null && currentUserUid != cu.uid && currentUserUid != userSnapshot.key) {
+                    if (cu != null && currentUserUid != cu.UserId&& currentUserUid != userSnapshot.key) {
                         userList.add(cu)
                     }
                 }
@@ -104,15 +117,11 @@ class Homescreen : AppCompatActivity(),ChatUserAdapter.OnUserClickListener {
 
     }
 
-     private  fun addUserToTheDataBase(name: String, email: String, photoUrl: String, uid: String) {
-        mdref = FirebaseDatabase.getInstance().getReference("users")
-        mdref.child(uid).setValue(User(name, email, photoUrl, uid))
-    }
+//     private  fun addUserToTheDataBase(name: String, email: String, photoUrl: String, uid: String) {
+//        mdref = FirebaseDatabase.getInstance().getReference("users")
+//        mdref.child(uid).setValue(User(name, photoUrl, uid))
+//    }
 
-    override fun onUserClick(uid: String) {
-        val intent = Intent(this, ChatScreen::class.java)
-        intent.putExtra("uid", uid) // Pass the UID to the ChatScreen activity
-    }
 
 
 }

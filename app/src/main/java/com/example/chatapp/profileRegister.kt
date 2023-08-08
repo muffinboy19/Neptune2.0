@@ -54,9 +54,6 @@ class profileRegister : AppCompatActivity() {
         imageViewProfileRegister.setOnClickListener {
             openImagePicker()
         }
-        val imageViewProfileRegister: ImageView = findViewById(R.id.imageViewProfileRegister)
-
-
 
         saveButtonProfileRegister.setOnClickListener {
             showLoadingView()
@@ -79,9 +76,8 @@ class profileRegister : AppCompatActivity() {
                     drawable.draw(canvas)
                     bitmap
                 }
-
                 uploadImageToFirebaseStorage(bitmap)
-                UserData.getInstance().username = userName
+                MyUserData.getInstance().username = userName
                 val intent = Intent(this, Homescreen::class.java)
                 startActivity(intent)
             }
@@ -100,28 +96,18 @@ class profileRegister : AppCompatActivity() {
 
     private fun uploadImageToFirebaseStorage(bitmap: Bitmap) {
         val storageRef: StorageReference = firebaseStorage.reference
-
-        // Create a reference to the image file with a unique name (e.g., using timestamp)
         val imageName = "image_${System.currentTimeMillis()}.jpg"
         val imageRef: StorageReference = storageRef.child(imageName)
-
-        // Convert the Bitmap to bytes (PNG format recommended for lossless quality)
         val baos = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
         val imageData: ByteArray = baos.toByteArray()
-
-        // Upload the image data to Firebase Storage
         val uploadTask = imageRef.putBytes(imageData)
-
-        // Handle the upload success and failure events
         uploadTask.addOnSuccessListener { taskSnapshot ->
-            // Image uploaded successfully, get the download URL
             imageRef.downloadUrl.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    // Get the image URL and store it in a variable
                     val downloadUri = task.result
                     val imageUrll = downloadUri.toString()
-                    UserData.getInstance().imageUrl = imageUrll
+                    MyUserData.getInstance().imageUrl = imageUrll
                     UserDataLiveData.imageUrlLiveData.postValue(imageUrll)
                     hideLoadingView()
                 } else {
@@ -132,9 +118,6 @@ class profileRegister : AppCompatActivity() {
             Toast.makeText(this, "Image Upload Failed: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
-
-
-
     private fun openImagePicker() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         startActivityForResult(intent, SELECT_IMAGE_REQUEST)

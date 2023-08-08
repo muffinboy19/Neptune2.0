@@ -1,8 +1,6 @@
 package com.example.chatapp
 
-import android.net.Uri
-
-class UserData private constructor() {
+class MyUserData private constructor() {
 
     var username: String? = null
     var userEmail: String? = null
@@ -11,11 +9,11 @@ class UserData private constructor() {
 
     companion object {
         @Volatile
-        private var instance: UserData? = null
+        private var instance: MyUserData? = null
 
-        fun getInstance(): UserData {
+        fun getInstance(): MyUserData {
             return instance ?: synchronized(this) {
-                instance ?: UserData().also { instance = it }
+                instance ?: MyUserData().also { instance = it }
             }
         }
     }

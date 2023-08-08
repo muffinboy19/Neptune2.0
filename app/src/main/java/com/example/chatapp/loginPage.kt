@@ -79,10 +79,10 @@ class loginPage : AppCompatActivity() {
                     hideLoadingView()
                     val user = firebaseAuth.currentUser
                     val userEmail = user?.email
-                    UserData.getInstance().userId = user?.uid
+                    MyUserData.getInstance().userId = user?.uid
                     Toast.makeText(this, "Welcome", Toast.LENGTH_SHORT).show()
                     // Intent for Homescreen activity
-                    UserData.getInstance().userEmail = userEmail
+                    MyUserData.getInstance().userEmail = userEmail
                     // Intent for ProfileRegister activity
                     val profileRegisterIntent = Intent(this, profileRegister::class.java)
                     startActivity(profileRegisterIntent)
