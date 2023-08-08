@@ -176,6 +176,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -205,6 +206,8 @@ class ChatScreen : AppCompatActivity() {
         messageList = ArrayList()
         messageAdapter = messageAdapter(this,messageList)
         chatRecyclerView = findViewById(R.id.chatt)
+        chatRecyclerView.layoutManager = LinearLayoutManager(this)
+        chatRecyclerView.adapter = messageAdapter
         messageBox = findViewById(R.id.messageBox)
         // Get the data from the intent
         val imageURL = intent.getStringExtra("imageUrl")
@@ -231,19 +234,34 @@ class ChatScreen : AppCompatActivity() {
 
             // Rest of your code ...
 
+//            mdbref.child("chats").child(recciverRoom!!).child("messages")
+//                .addValueEventListener(object : ValueEventListener {
+//                    override fun onDataChange(snapshot: DataSnapshot) {
+//                        val newMessages = ArrayList<messaage>()
+//                        for (postSnap in snapshot.children) {
+//                            val boxo = postSnap.getValue(messaage::class.java)
+//                            newMessages.add(boxo!!)
+//                        }
+//                        messageList.addAll(newMessages)
+//                        messageAdapter.notifyDataSetChanged()
+//                    }
+//                    override fun onCancelled(error: DatabaseError) {
+//
+//                    }
+//                })
+
             mdbref.child("chats").child(recciverRoom!!).child("messages")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
-                        val newMessages = ArrayList<messaage>()
+                        messageList.clear() // Clear the list before adding new messages
                         for (postSnap in snapshot.children) {
                             val boxo = postSnap.getValue(messaage::class.java)
-                            newMessages.add(boxo!!)
+                            boxo?.let { messageList.add(it) }
                         }
-                        messageList.addAll(newMessages)
                         messageAdapter.notifyDataSetChanged()
                     }
                     override fun onCancelled(error: DatabaseError) {
-
+                        // Handle error
                     }
                 })
 
